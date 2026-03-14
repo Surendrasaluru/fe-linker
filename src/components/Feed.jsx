@@ -1,9 +1,66 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import axios, { Axios } from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addFeed } from "../utils/feedSlice";
+import FeedCard from "./FeedCard";
 
 const Feed = () => {
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user?.data);
-  if (!user) return;
+  const feed = useSelector((store) => store.feed);
+
+  const getFeed = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/user/feed",
+
+        { withCredentials: true },
+      );
+      console.log(res.data);
+
+      dispatch(addFeed(res.data));
+    } catch (err) {
+      console.error("Failed to fetch feed:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!user) return;
+    if (feed !== null) return;
+
+    // If we already have a feed, don't fetch again (prevents redundant API calls)
+
+    getFeed();
+  }, [user, feed]);
+  if (!user)
+    return (
+      <h1 className="text-center mt-10">Please Login to view the feed.</h1>
+    );
+
+  if (feed === null) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-[60vh] gap-4">
+        <span className="loading loading-ring loading-lg text-primary"></span>
+        <p className="font-mono text-sm animate-pulse">
+          Scanning the network for matches...
+        </p>
+      </div>
+    );
+  }
+  if (feed.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-[60vh] text-center px-4">
+        <h1 className="text-4xl mb-4">🏜️</h1>
+        <h1 className="text-2xl font-bold opacity-70">
+          No new profiles found!
+        </h1>
+        <p className="max-w-xs mt-2 opacity-50">
+          You've seen everyone in your area. Check back later or update your
+          skills to find new peers.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-300/30 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [bg-size:16px_16px] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] p-4 lg:p-8">
@@ -30,7 +87,7 @@ const Feed = () => {
                 <p className="text-xs opacity-60 font-mono mb-3">
                   {user?.email}
                 </p>
-                <p className="text-xs opacity-60 font-mono mb-3">{user?.age}</p>
+
                 <div className="badge badge-outline badge-sm mb-4 uppercase tracking-tighter">
                   {user?.gender || "Developer"}
                 </div>
@@ -88,17 +145,10 @@ const Feed = () => {
 
         {/* CENTER: The Feed Cards (Col span 6) */}
         <div className="lg:col-span-6 flex flex-col items-center space-y-6">
-          <h1 className="text-xl font-bold self-start ml-2">
+          <h1 className="text-xl font-bold self-center ml-2">
             Recommended for you
           </h1>
-
-          {/* Feed Card Placeholder - You will map your API data here */}
-          <div className="card w-full max-w-md bg-base-100 shadow-2xl border border-base-300">
-            {/* Feed Card Component goes here */}
-            <div className="p-10 text-center">
-              Feed Cards will appear here...
-            </div>
-          </div>
+          <FeedCard user={feed[9]} />
         </div>
 
         {/* RIGHT SIDEBAR: Management (Col span 3) */}

@@ -19,7 +19,7 @@ const Login = () => {
         { withCredentials: true },
       );
       console.log("Login Successful:", res);
-      dispatch(addUser(res.data));
+      dispatch(addUser(res.data.data));
       toast.success("Login Successful");
       navigate("/feed");
     } catch (err) {

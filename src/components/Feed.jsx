@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 const Feed = () => {
   const user = useSelector((store) => store.user?.data);
+  if (!user) return;
 
   return (
     <div className="min-h-screen bg-base-300/30 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [bg-size:16px_16px] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] p-4 lg:p-8">
@@ -110,9 +111,9 @@ const Feed = () => {
           <div className="flex items-center justify-between p-3 bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:bg-base-300 transition-all cursor-pointer group">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20">
-                <span className="text-xl">🤝</span>
+                <span className="text-xl">❤️</span>
               </div>
-              <span className="font-medium text-sm">Connections</span>
+              <span className="font-medium text-sm">Friends</span>
             </div>
             <button className="btn btn-xs btn-outline btn-primary px-4">
               View

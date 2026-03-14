@@ -1,9 +1,11 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: all;
+}
 
 /* This ensures the background follows the theme automatically */
 @layer base {
   body {
-    @apply bg-base-200 text-base-content min-h-screen transition-colors duration-300;
+    @apply bg-base-300 text-base-content min-h-screen transition-colors duration-300;
   }
 }

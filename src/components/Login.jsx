@@ -17,7 +17,7 @@ const Login = () => {
     const newErrors = {};
     if (!email.includes("@")) newErrors.email = "Please enter a valid email";
     if (password.length < 6)
-      newErrors.password = "Password must be at least 8 characters";
+      newErrors.password = "Password must be at least 6 characters";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -32,14 +32,21 @@ const Login = () => {
       );
       console.log("Login Successful:", res);
       dispatch(addUser(res.data.data));
-      toast.success("Login Successful");
+      toast.success("Login Successful", {
+        duration: 5000,
+        icon: "🚀",
+      });
       navigate("/feed");
     } catch (err) {
       // Better error logging to see what the backend is actually saying
       console.error("Login Error:", err.response?.data || err.message);
 
       const errorMsg = err.response?.data?.message || "Invalid Credentials";
-      toast.error(errorMsg);
+      console.log(err.response);
+      toast.error(errorMsg, {
+        duration: 2000,
+        icon: "😨",
+      });
     }
   };
   return (
@@ -97,7 +104,7 @@ const Login = () => {
             </div>
             {errors.password && (
               <label className="label py-0">
-                <span className="label-text-alt text-error font-semibold">
+                <span className="label-text-alt text-success font-semibold">
                   {errors.password}
                 </span>
               </label>

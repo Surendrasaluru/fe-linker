@@ -27,7 +27,7 @@ const Body = () => {
       if (err.response?.status === 401) {
         // Only redirect if they aren't already on the login page
         if (window.location.pathname !== "/login") {
-          toast.error("Session expired. Please login again.");
+          toast.error("Session expired. Please login again");
           navigate("/login");
         }
       }

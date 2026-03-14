@@ -7,7 +7,7 @@ import { addUser } from "../utils/userSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
-  const [email, setEmail] = useState("kaivalya@email.com");
+  const [email, setEmail] = useState("surendra@email.com");
   const [password, setPassword] = useState("Surendra@27");
   const navigate = useNavigate();
   const dispatch = useDispatch();

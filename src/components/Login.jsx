@@ -4,13 +4,25 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("kaivalya@email.com");
   const [password, setPassword] = useState("Surendra@27");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
   const handleLogin = async () => {
+    const newErrors = {};
+    if (!email.includes("@")) newErrors.email = "Please enter a valid email";
+    if (password.length < 6)
+      newErrors.password = "Password must be at least 8 characters";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     console.log("Button Clicked!");
     try {
       const res = await axios.post(
@@ -25,7 +37,9 @@ const Login = () => {
     } catch (err) {
       // Better error logging to see what the backend is actually saying
       console.error("Login Error:", err.response?.data || err.message);
-      toast.error("Oops! something went wrong");
+
+      const errorMsg = err.response?.data?.message || "Invalid Credentials";
+      toast.error(errorMsg);
     }
   };
   return (
@@ -44,21 +58,50 @@ const Login = () => {
               type="email"
               value={email}
               placeholder="surendra@example.com"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors({ ...errors, email: "" }); // Clear error on type
+              }}
               className="input input-bordered w-full focus:input-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />
+            {errors.email && (
+              <label className="label py-0">
+                <span className="label-text-alt text-error font-semibold">
+                  {errors.email}
+                </span>
+              </label>
+            )}
           </div>
           <div className="form-control w-full mt-4">
             <label className="label py-1">
               <span className="label-text font-bold opacity-70">Password</span>
             </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input input-bordered w-full focus:input-primary focus:ring-2 focus:ring-primary/20 transition-all"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors({ ...errors, password: "" });
+                }}
+                className={`input input-bordered w-full pr-12 focus:input-primary ${errors.password ? "input-error" : ""}`}
+              />
+              {/* Eye Toggle Button */}
+              <button
+                type="button"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-xl opacity-50 hover:opacity-100 transition-opacity"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              </button>
+            </div>
+            {errors.password && (
+              <label className="label py-0">
+                <span className="label-text-alt text-error font-semibold">
+                  {errors.password}
+                </span>
+              </label>
+            )}
           </div>
           <div className="card-actions justify-center mt-8">
             <button

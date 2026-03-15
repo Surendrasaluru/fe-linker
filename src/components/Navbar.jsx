@@ -1,11 +1,19 @@
 import axios from "axios";
 import React from "react";
 import toast from "react-hot-toast";
-import { FaUserCircle, FaSignOutAlt, FaInbox } from "react-icons/fa";
+import {
+  FaUserCircle,
+  FaSignOutAlt,
+  FaInbox,
+  FaUserFriends,
+} from "react-icons/fa";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
+import { removeFriend } from "../utils/friendSlice";
+import { removeRequest } from "../utils/requestSlice";
+import { removeFeed } from "../utils/feedSlice";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user?.data);
@@ -15,7 +23,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
-      dispatch(removeUser());
       await axios.post(
         "http://localhost:3000/logout",
         {},
@@ -23,13 +30,17 @@ const Navbar = () => {
       );
 
       toast.success("Logged out succesfully");
+      dispatch(removeUser());
+      dispatch(removeFriend());
+      dispatch(removeRequest());
+      dispatch(removeFeed());
       navigate("/login");
     } catch (err) {
       console.log(err);
     }
   };
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-base-100 shadow-sm z-100">
       <div className="flex-1">
         <Link to={user ? "/feed" : "/login"} className="btn btn-ghost text-xl">
           StackMate ❤️
@@ -65,15 +76,15 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link>
+                <Link to="/requests">
                   <FaInbox className="text-secondary" />
                   Requests
                 </Link>
               </li>
               <li>
-                <Link>
-                  <HiOutlineAdjustmentsHorizontal />
-                  Settings
+                <Link to="/friends">
+                  <FaUserFriends />
+                  Friends
                 </Link>
               </li>
               <div className="divider my-1"></div>

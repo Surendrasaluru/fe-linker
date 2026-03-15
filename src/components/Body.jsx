@@ -19,7 +19,7 @@ const Body = () => {
       return;
     }
     try {
-      const res = await axios.get("http://localhost:3000/profile/view", {
+      const res = await axios.get("http://localhost:3000/profileview", {
         withCredentials: true,
       });
       dispatch(addUser(res.data.data));
@@ -33,7 +33,7 @@ const Body = () => {
       }
       dispatch(setLoading(false));
 
-      console.error(err);
+      // console.error(err);
     }
   };
   useEffect(() => {

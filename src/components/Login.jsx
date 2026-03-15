@@ -33,7 +33,7 @@ const Login = () => {
       console.log("Login Successful:", res);
       dispatch(addUser(res.data.data));
       toast.success("Login Successful", {
-        duration: 5000,
+        duration: 3000,
         icon: "🚀",
       });
       navigate("/feed");
@@ -42,7 +42,7 @@ const Login = () => {
       console.error("Login Error:", err.response?.data || err.message);
 
       const errorMsg = err.response?.data?.message || "Invalid Credentials";
-      console.log(err.response);
+      console.log(err);
       toast.error(errorMsg, {
         duration: 2000,
         icon: "😨",

@@ -3,6 +3,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import FeedCard from "./FeedCard";
+import TechNews from "./TechNews";
+
+import Network from "./Network";
+import { Link } from "react-router-dom";
+import Friends from "./Friends";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -63,168 +68,112 @@ const Feed = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-300/30 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [bg-size:16px_16px] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] p-4 lg:p-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-3 space-y-4">
-          {/* Main Profile Card */}
-          <div className="card bg-base-400 shadow-xl border border-base-300 overflow-hidden">
-            {/* Profile Header/Cover - Optional gradient for style */}
-            <div className="h-20 bg-linear-to-r from-primary to-secondary opacity-80"></div>
+    <div className="min-h-screen bg-[#0f1115] text-slate-300 selection:bg-violet-500/30">
+      {/* Subtle Fixed Background Overlay */}
+      <div className="fixed inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [bg-size:24px_24px] opacity-40 pointer-events-none"></div>
 
-            <div className="px-5 pb-5">
-              {/* Avatar - Pulled from your photoURL */}
-              <div className="avatar -mt-10 mb-3 justify-center flex">
-                <div className="w-24 rounded-full ring ring-base-100 ring-offset-2 shadow-lg bg-base-100">
-                  <img src={user?.photoURL} alt="Profile" />
-                </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* LEFT SIDEBAR: PROFILE (Sticky) */}
+          <div className="lg:col-span-3 sticky top-24">
+            <div className="card w-full bg-[#16191e]/80 backdrop-blur-xl shadow-2xl border border-white/5 overflow-hidden transition-all duration-300 hover:border-violet-500/30 group">
+              {/* Banner */}
+              <div className="h-20 bg-linear-to-br from-violet-600 via-primary to-blue-600 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.5),transparent)]"></div>
               </div>
 
-              {/* Identity */}
-              <div className="text-center">
-                <h2 className="text-xl font-bold">
-                  {user?.firstName} {user?.lastName}
-                </h2>
-                <p className="text-xs opacity-60 font-mono mb-3">
-                  {user?.email}
-                </p>
+              <div className="px-5 pb-5">
+                {/* Avatar */}
+                <div className="avatar -mt-10 mb-3 justify-center flex">
+                  {/* OUTER WRAPPER: relative but NO overflow-hidden */}
+                  <div className="w-24 h-24 relative">
+                    {/* INNER WRAPPER: This clips the image only */}
+                    <div className="w-full h-full ring-4 ring-[#16191e] shadow-2xl bg-base-300 overflow-hidden">
+                      <img
+                        src={user?.photoURL}
+                        alt="Profile"
+                        className="object-cover h-full w-full"
+                      />
+                    </div>
 
-                <div className="badge badge-outline badge-sm mb-4 uppercase tracking-tighter">
-                  {user?.gender || "Developer"}
-                </div>
-              </div>
-
-              <div className="divider my-0"></div>
-
-              {/* About Section */}
-              <div className="py-4">
-                <p className="text-sm leading-relaxed italic opacity-80">
-                  "{user?.about || "No bio available."}"
-                </p>
-              </div>
-
-              {/* Skills Section - Mapping through your skills array */}
-              <div className="flex flex-wrap gap-2  mb-6">
-                {user?.skills?.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="badge badge-primary badge-outline text-[15px] font-medium"
-                  >
-                    {skill}
+                    {/* GREEN DOT: Now sits on top and isn't cut off */}
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-[#16191e] rounded-full z-20"></div>
                   </div>
-                ))}
-              </div>
+                </div>
 
-              {/* Edit Button */}
-              <button className="btn btn-primary btn-block btn-sm shadow-md">
-                Edit Profile
-              </button>
+                <div className="text-center space-y-1">
+                  <h2 className="text-xl font-black text-white tracking-tight leading-none group-hover:text-violet-400 transition-colors">
+                    {user?.firstName} {user?.lastName}
+                  </h2>
+                  <p className="text-[11px] text-slate-500 font-medium tracking-wide">
+                    {user?.email}
+                  </p>
+
+                  <div className="flex items-center justify-center gap-2 pt-2 pb-1">
+                    <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                      {user?.gender || "User"}
+                    </span>
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/5 border border-emerald-500/10">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">
+                        {user?.company || "Virtusa"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="divider before:bg-white/5 after:bg-white/5 my-3"></div>
+
+                <p className="text-[11px] text-slate-400 leading-relaxed text-center italic px-1 line-clamp-3 mb-4">
+                  "
+                  {user?.about || "Solving complex problems with elegant code."}
+                  "
+                </p>
+
+                {/* --- Added Skills Section --- */}
+                <div className="mb-5">
+                  <div className="flex flex-wrap justify-center gap-1.5">
+                    {user?.skills?.length > 0
+                      ? user.skills.map((skill, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 rounded-md bg-violet-500/10 border border-violet-500/20 text-[10px] font-semibold text-violet-300 transition-all hover:bg-violet-500/20"
+                          >
+                            {skill}
+                          </span>
+                        ))
+                      : ["React", "Node.js", "Tailwind"].map((skill) => (
+                          <span
+                            key={skill}
+                            className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] font-semibold text-slate-400"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                  </div>
+                </div>
+                <Link to="/profile">
+                  <button className="btn btn-primary btn-block btn-sm h-10 rounded-xl border-none bg-linear-to-r from-violet-600 to-indigo-600 hover:scale-[1.02] active:scale-[0.98] transition-all text-[11px] font-bold uppercase tracking-widest shadow-lg shadow-violet-900/20">
+                    Edit Profile
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* Suggested Extra Feature: Tech Stack Goals */}
-          <div className="card bg-base-100 shadow-md border border-base-300 p-5">
-            <h3 className="text-xs font-black uppercase opacity-50 mb-3 tracking-widest">
-              Current Mission
-            </h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  defaultChecked
-                  className="checkbox checkbox-xs checkbox-success"
-                />
-                <span className="text-xs">Optimize Feed CSS</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <input type="checkbox" className="checkbox checkbox-xs" />
-                <span className="text-xs">Integrate Profile API</span>
+          <div className="lg:col-span-6 flex flex-col items-center w-full">
+            {/* Optional: Max-width keeps the card from getting too wide on big screens */}
+            <div className="w-full max-w-2xl space-y-6">
+              {/* This wrapper ensures the FeedCard sits dead center */}
+              <div className="flex justify-center w-full">
+                <FeedCard user={feed[7]} />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* CENTER: The Feed Cards (Col span 6) */}
-        <div className="lg:col-span-6 flex flex-col items-center space-y-6">
-          <h1 className="text-xl font-bold self-center ml-2">
-            Recommended for you
-          </h1>
-          <FeedCard user={feed[9]} />
-        </div>
-
-        {/* RIGHT SIDEBAR: Management (Col span 3) */}
-        <div className="lg:col-span-3 space-y-4">
-          <h2 className="text-sm font-bold uppercase opacity-60 ml-2 tracking-widest mb-4">
-            Network Activity
-          </h2>
-
-          {/* 1. Connections/Friends */}
-          <div className="flex items-center justify-between p-3 bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:bg-base-300 transition-all cursor-pointer group">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20">
-                <span className="text-xl">❤️</span>
-              </div>
-              <span className="font-medium text-sm">Friends</span>
-            </div>
-            <button className="btn btn-xs btn-outline btn-primary px-4">
-              View
-            </button>
-          </div>
-
-          {/* 2. Received Requests */}
-          <div className="flex items-center justify-between p-3 bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:bg-base-300 transition-all cursor-pointer group">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-secondary/10 rounded-lg group-hover:bg-secondary/20">
-                <span className="text-xl">📥</span>
-              </div>
-              <span className="font-medium text-sm">Requests</span>
-            </div>
-            <button className="btn btn-xs btn-outline btn-secondary px-4">
-              Open
-            </button>
-          </div>
-
-          {/* 3. Sent/Pending Requests */}
-          <div className="flex items-center justify-between p-3 bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:bg-base-300 transition-all cursor-pointer group">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-accent/10 rounded-lg group-hover:bg-accent/20">
-                <span className="text-xl">📤</span>
-              </div>
-              <span className="font-medium text-sm">Sent Pending</span>
-            </div>
-            <button className="btn btn-xs btn-outline btn-accent px-4">
-              Check
-            </button>
-          </div>
-
-          {/* 4. Ignored/Rejected */}
-          <div className="flex items-center justify-between p-3 bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:bg-base-300 transition-all cursor-pointer group">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-error/10 rounded-lg group-hover:bg-error/20">
-                <span className="text-xl">🚫</span>
-              </div>
-              <span className="font-medium text-sm">Rejected</span>
-            </div>
-            <button className="btn btn-xs btn-outline btn-error px-4">
-              Manage
-            </button>
-          </div>
-
-          {/* Summary Stat Card */}
-          <div className="mt-8 p-5 bg-base-300/50 rounded-2xl border border-dashed border-base-300">
-            <p className="text-[10px] font-bold uppercase opacity-40 mb-3">
-              Quick Stats
-            </p>
-            <div className="flex justify-between">
-              <div className="text-center">
-                <p className="text-lg font-black">24</p>
-                <p className="text-[9px] uppercase opacity-60">Friends</p>
-              </div>
-              <div className="divider divider-horizontal mx-0"></div>
-              <div className="text-center">
-                <p className="text-lg font-black">156</p>
-                <p className="text-[9px] uppercase opacity-60">Profile Views</p>
-              </div>
-            </div>
+          {/* RIGHT SIDEBAR: NETWORK (Sticky) */}
+          <div className="lg:col-span-3 sticky top-24 space-y-6">
+            <TechNews />
           </div>
         </div>
       </div>

@@ -8,6 +8,10 @@ import TechNews from "./TechNews";
 import Network from "./Network";
 import { Link } from "react-router-dom";
 import Friends from "./Friends";
+import ShimmerFeedCard from "./ShimmerFeedCard";
+
+import EmptyFeedState from "./EmptyFeedState";
+import RewindHistoryTab from "./RewindHistoryTab";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -31,12 +35,11 @@ const Feed = () => {
 
   useEffect(() => {
     if (!user) return;
-    if (feed !== null) return;
 
     // If we already have a feed, don't fetch again (prevents redundant API calls)
 
     getFeed();
-  }, [user, feed]);
+  }, []);
   if (!user)
     return (
       <h1 className="text-center mt-10">Please Login to view the feed.</h1>
@@ -48,20 +51,6 @@ const Feed = () => {
         <span className="loading loading-ring loading-lg text-primary"></span>
         <p className="font-mono text-sm animate-pulse">
           Scanning the network for matches...
-        </p>
-      </div>
-    );
-  }
-  if (feed.length === 0) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-[60vh] text-center px-4">
-        <h1 className="text-4xl mb-4">🏜️</h1>
-        <h1 className="text-2xl font-bold opacity-70">
-          No new profiles found!
-        </h1>
-        <p className="max-w-xs mt-2 opacity-50">
-          You've seen everyone in your area. Check back later or update your
-          skills to find new peers.
         </p>
       </div>
     );
@@ -161,18 +150,35 @@ const Feed = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-6 flex flex-col items-center w-full">
-            {/* Optional: Max-width keeps the card from getting too wide on big screens */}
-            <div className="w-full max-w-2xl space-y-6">
-              {/* This wrapper ensures the FeedCard sits dead center */}
-              <div className="flex justify-center w-full">
-                <FeedCard user={feed[7]} />
+          {/* 1. Check if feed exists (Loading State) */}
+          {!feed ? (
+            <div className="lg:col-span-6 flex flex-col items-center w-full">
+              <div className="w-full max-w-2xl flex justify-center">
+                <ShimmerFeedCard />
               </div>
             </div>
-          </div>
+          ) : feed.length > 0 ? (
+            /* 2. Active Feed State */
+            <div className="lg:col-span-6 flex flex-col items-center w-full">
+              <div className="w-full max-w-2xl space-y-6">
+                <div className="flex justify-center w-full">
+                  <FeedCard user={feed[0]} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* 3. Empty State (The Desert/End of Feed Card) */
+            <div className="lg:col-span-6 flex flex-col items-center w-full">
+              <div className="w-full max-w-2xl flex justify-center">
+                {/* We use the stylized EmptyCard we designed earlier */}
+                <EmptyFeedState />
+              </div>
+            </div>
+          )}
 
           {/* RIGHT SIDEBAR: NETWORK (Sticky) */}
           <div className="lg:col-span-3 sticky top-24 space-y-6">
+            <RewindHistoryTab />
             <TechNews />
           </div>
         </div>

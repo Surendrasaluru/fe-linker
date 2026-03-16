@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 
 import {
@@ -6,12 +7,34 @@ import {
   HiOutlineBuildingOffice2,
   HiOutlineMapPin,
 } from "react-icons/hi2";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
+import toast from "react-hot-toast";
 
 const FeedCard = ({ user }) => {
+  const dispatch = useDispatch();
   if (!user) return null;
 
-  const { firstName, lastName, photoURL, gender, about, skills, company } =
+  const { firstName, lastName, photoURL, gender, about, skills, company, _id } =
     user;
+  const handleSendReq = async (status, _id) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/request/send/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      console.log(res);
+      dispatch(removeUserFromFeed(_id));
+      if (status === "like") {
+        toast.success("Friend Request sent ❤️");
+      } else {
+        toast.success("You Have Ignored 😊");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="group w-full max-w-md bg-[#16191e]/90 backdrop-blur-xl rounded-[2.5rem] border border-white/5 overflow-hidden shadow-xl transition-all duration-500 hover:border-violet-500/30 hover:shadow-violet-500/10">
@@ -77,13 +100,19 @@ const FeedCard = ({ user }) => {
         {/* 3. Action Buttons */}
         <div className="flex gap-4 pt-2">
           {/* Pass Button */}
-          <button className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-white/[0.03] border border-white/5 text-slate-500 font-black uppercase text-[10px] tracking-widest hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all duration-300 active:scale-95">
+          <button
+            onClick={() => handleSendReq("pass", _id)}
+            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-white/[0.03] border border-white/5 text-slate-500 font-black uppercase text-[10px] tracking-widest hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all duration-300 active:scale-95"
+          >
             <HiXMark size={20} />
             Pass
           </button>
 
           {/* Connect Button */}
-          <button className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white font-black uppercase text-[10px] tracking-widest shadow-xl shadow-violet-900/20 hover:shadow-violet-600/40 hover:scale-[1.02] transition-all duration-300 active:scale-95">
+          <button
+            onClick={() => handleSendReq("like", _id)}
+            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white font-black uppercase text-[10px] tracking-widest shadow-xl shadow-violet-900/20 hover:shadow-violet-600/40 hover:scale-[1.02] transition-all duration-300 active:scale-95"
+          >
             <HiCheck size={20} />
             Connect
           </button>

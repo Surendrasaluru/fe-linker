@@ -14,6 +14,7 @@ import { removeUser } from "../utils/userSlice";
 import { removeFriend } from "../utils/friendSlice";
 import { removeRequest } from "../utils/requestSlice";
 import { removeFeed } from "../utils/feedSlice";
+import { removeIgnored } from "../utils/ignoredSlice";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user?.data);
@@ -34,6 +35,7 @@ const Navbar = () => {
       dispatch(removeFriend());
       dispatch(removeRequest());
       dispatch(removeFeed());
+      dispatch(removeIgnored());
       navigate("/login");
     } catch (err) {
       console.log(err);

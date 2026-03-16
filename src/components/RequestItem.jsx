@@ -1,10 +1,41 @@
 import React from "react";
+import { removeRequestFromList } from "../utils/requestSlice";
 import { FaUserCircle, FaCheck, FaTimes, FaCommentAlt } from "react-icons/fa";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import getTime from "../utils/getTime";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const RequestItem = ({ request }) => {
-  const { firstName, lastName, photoURL, about, company, createdAt } = request;
+  const dispatch = useDispatch();
+  const {
+    _id, // This is the Request ID (from row._id)
+    firstName,
+    lastName,
+    photoURL,
+    about,
+    company,
+    createdAt,
+  } = request;
+
+  const reviewReq = async (status, _id) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/request/review/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      console.log(res, _id);
+      if (res.status === 200) {
+        // DISPATCH the action to remove it from the Redux store
+        dispatch(removeRequestFromList(_id));
+      }
+      toast.success(`Request ${status} succesfully`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="group relative bg-[#0f1115] border border-slate-800 rounded-xl p-3 mb-3 hover:border-violet-500/50 transition-all duration-300 shadow-2xl">
@@ -64,11 +95,17 @@ const RequestItem = ({ request }) => {
 
         {/* Action Buttons: Minimalist Outlined Style */}
         <div className="flex items-center gap-2">
-          <button className="h-8 px-3 flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold rounded-md transition-all active:scale-95">
+          <button
+            onClick={() => reviewReq("accepted", _id)}
+            className="h-8 px-3 flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold rounded-md transition-all active:scale-95"
+          >
             <FaCheck />
             Accept
           </button>
-          <button className="h-8 w-8 flex items-center justify-center border border-slate-700 text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 rounded-md transition-all">
+          <button
+            onClick={() => reviewReq("rejected", _id)}
+            className="h-8 w-8 flex items-center justify-center border border-slate-700 text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 rounded-md transition-all"
+          >
             <FaTimes />
           </button>
         </div>

@@ -10,6 +10,7 @@ import appStore from "./utils/appStore";
 import Feed from "./components/Feed";
 import Requests from "./components/Requests";
 import Friends from "./components/Friends";
+import IgnoredUsers from "./components/ignoredUsers";
 function App() {
   return (
     <>
@@ -49,6 +50,7 @@ function App() {
               <Route path="/feed" element={<Feed />} />
               <Route path="/friends" element={<Friends />} />
               <Route path="/requests" element={<Requests />} />
+              <Route path="/ignored" element={<IgnoredUsers />} />
             </Route>
           </Routes>
         </BrowserRouter>

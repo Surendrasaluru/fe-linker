@@ -16,16 +16,16 @@ const getTime = (dateString) => {
   const now = new Date();
   const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
 
-  if (diffInHours < 1) return "Joined just now";
+  if (diffInHours < 1) return "Request Recieved just now";
 
   // 2. If less than 24 hours ago (Show hours)
-  if (diffInHours < 24) return `Joined ${diffInHours}h ago`;
+  if (diffInHours < 24) return `Request Recieved ${diffInHours}h ago`;
 
   // 3. If between 24 and 48 hours (Show yesterday)
-  if (diffInHours < 48) return "Joined yesterday";
+  if (diffInHours < 48) return "Request Recieved Yesterday";
 
   // 4. Otherwise show days
   const diffInDays = Math.floor(diffInHours / 24);
-  return `Member for ${diffInDays} days`;
+  return `Request Sent ${diffInDays} days ago`;
 };
 export default getTime;

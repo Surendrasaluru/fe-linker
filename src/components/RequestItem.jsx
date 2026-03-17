@@ -46,7 +46,7 @@ const RequestItem = ({ request }) => {
         <div className="flex items-center gap-4">
           {/* Hexagonal-style Avatar Container */}
           <div className="relative">
-            <div className="w-11 h-11 bg-slate-800 rounded-lg rotate-3 group-hover:rotate-0 transition-transform duration-300 overflow-hidden border border-slate-700">
+            <div className="w-14 h-14 bg-slate-800 rounded-lg rotate-3 group-hover:rotate-0 transition-transform duration-300 overflow-hidden border border-slate-700">
               {photoURL ? (
                 <img
                   src={photoURL}
@@ -64,10 +64,10 @@ const RequestItem = ({ request }) => {
           {/* User Details */}
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-100 tracking-tight">
+              <h3 className="text-md font-bold text-slate-100 tracking-tight">
                 {firstName} {lastName}
               </h3>
-              <span className="text-[9px] text-violet-400 font-mono border border-violet-500/30 px-1.5 py-0.5 rounded uppercase">
+              <span className="text-[12px] text-violet-400 font-mono border border-violet-500/30 px-1.5 py-0.5 rounded uppercase">
                 Incoming
               </span>
             </div>
@@ -75,21 +75,21 @@ const RequestItem = ({ request }) => {
             <div className="flex items-center gap-3 mt-1 text-slate-400">
               <div className="flex items-center gap-1">
                 <HiOutlineBuildingOffice2
-                  size={12}
+                  size={13}
                   className="text-slate-500"
                 />
-                <span className="text-[10px] font-medium">
+                <span className="text-[12px] font-medium">
                   {company || "Tech Talent"}
                 </span>
               </div>
               <span className="text-slate-700">|</span>
-              <p className="text-[10px] truncate max-w-37.5 italic text-slate-500">
+              <p className="text-[12px] truncate max-w-37.5 italic text-slate-500">
                 {about || "Full-stack Developer"}
               </p>
             </div>
           </div>
-          <span className="px-1.5 py-0.5 border border-violet-500/20 text-violet-400 text-[8px] font-bold rounded uppercase tracking-wider bg-violet-500/5">
-            {getTime(createdAt)}
+          <span className="px-1.5 py-0.5 border border-violet-500/20 text-violet-400 text-[12px] font-bold rounded uppercase tracking-wider bg-violet-500/5">
+            Recieved {getTime(createdAt)}
           </span>
         </div>
 

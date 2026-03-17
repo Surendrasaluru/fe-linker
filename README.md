@@ -1,16 +1,24 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+<div className="space-y-4">
+        {articles.map((article) => (
+          <a
+            key={article.id}
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block"
+          >
+            <p className="text-[13px] font-medium leading-tight group-hover:text-primary transition-colors line-clamp-2">
+              {article.title}
+            </p>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[10px] opacity-40">
+                {article.readable_publish_date}
+              </span>
+              <span className="text-[10px] opacity-40">•</span>
+              <span className="text-[10px] opacity-40">
+                {article.public_reactions_count} reactions
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>

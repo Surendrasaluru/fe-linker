@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 import {
   HiCheck,
@@ -10,13 +10,24 @@ import {
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import toast from "react-hot-toast";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 
 const FeedCard = ({ user }) => {
   const dispatch = useDispatch();
+  const [isExpanded, setIsExpanded] = useState(false);
   if (!user) return null;
 
-  const { firstName, lastName, photoURL, gender, about, skills, company, _id } =
-    user;
+  const {
+    firstName,
+    lastName,
+    photoURL,
+    gender,
+    about,
+    skills,
+    company,
+    place,
+    _id,
+  } = user;
   const handleSendReq = async (status, _id) => {
     try {
       const res = await axios.post(
@@ -39,7 +50,7 @@ const FeedCard = ({ user }) => {
   return (
     <div className="group w-full max-w-md bg-[#16191e]/90 backdrop-blur-xl rounded-[2.5rem] border border-white/5 overflow-hidden shadow-xl transition-all duration-500 hover:border-violet-500/30 hover:shadow-violet-500/10">
       {/* 1. Image Section */}
-      <div className="relative h-66 overflow-hidden">
+      <div className="relative h-68 overflow-hidden">
         <img
           src={photoURL}
           alt={firstName}
@@ -73,13 +84,21 @@ const FeedCard = ({ user }) => {
               {company}
             </span>
           </div>
+          <div className="flex items-center gap-2 text-slate-500">
+            <HiOutlineLocationMarker className="text-violet-500" size={16} />
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em]">
+              {place}
+            </span>
+          </div>
         </div>
 
         {/* About Bio */}
-        <p className="text-sm text-slate-400 leading-relaxed font-mono line-clamp-2 italic font-medium">
+        <p
+          onClick={() => setIsExpanded(!isExpanded)}
+          className={`text-sm text-slate-400 leading-relaxed font-mono italic cursor-pointer transition-all ${isExpanded ? "" : "line-clamp-2"}`}
+        >
           {about ? `"${about}"` : "No bio provided."}
         </p>
-
         {/* Skills Grid */}
         <div className="flex flex-wrap gap-1.5">
           {skills?.slice(0, 4).map((skill, index) => (
@@ -102,7 +121,7 @@ const FeedCard = ({ user }) => {
           {/* Pass Button */}
           <button
             onClick={() => handleSendReq("pass", _id)}
-            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-white/[0.03] border border-white/5 text-slate-500 font-black uppercase text-[10px] tracking-widest hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all duration-300 active:scale-95"
+            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-white/3 border border-white/5 text-slate-500 font-black uppercase text-[10px] tracking-widest hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all duration-300 active:scale-95"
           >
             <HiXMark size={20} />
             Pass
@@ -111,7 +130,7 @@ const FeedCard = ({ user }) => {
           {/* Connect Button */}
           <button
             onClick={() => handleSendReq("like", _id)}
-            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white font-black uppercase text-[10px] tracking-widest shadow-xl shadow-violet-900/20 hover:shadow-violet-600/40 hover:scale-[1.02] transition-all duration-300 active:scale-95"
+            className=" animate-pulse shadow-[0_0_20px_rgba(124,58,237,0.3)] flex-1 flex items-center justify-center gap-2 h-14 rounded-2xl bg-linear-to-br from-violet-600 to-indigo-600 text-white font-black uppercase text-[10px] tracking-widest  shadow-violet-900/20 hover:shadow-violet-600/40 hover:scale-[1.02] transition-all duration-300 active:scale-95"
           >
             <HiCheck size={20} />
             Connect

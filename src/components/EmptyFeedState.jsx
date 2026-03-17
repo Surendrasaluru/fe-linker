@@ -2,6 +2,7 @@ import React from "react";
 
 import { HiOutlineSparkles } from "react-icons/hi2";
 import { IoMdRefresh } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const EmptyFeedState = () => {
   return (
@@ -50,13 +51,15 @@ const EmptyFeedState = () => {
 
         {/* 3. Action Button (Matches Connect Button Style) */}
         <div className="pt-4">
-          <button className="w-full flex items-center justify-center gap-3 h-14 rounded-2xl bg-white/3  border border-white/10 text-white font-black uppercase text-[10px] tracking-widest hover:bg-violet-600 hover:border-violet-500 transition-all duration-300 active:scale-95 group/btn">
-            <IoMdRefresh
-              size={18}
-              className="group-hover/btn:rotate-180 transition-transform duration-500"
-            />
-            See Ignored Users
-          </button>
+          <Link to="/ignored">
+            <button className="w-full flex items-center justify-center gap-3 h-14 rounded-2xl bg-white/3  border border-white/10 text-white font-black uppercase text-[10px] tracking-widest hover:bg-violet-600 hover:border-violet-500 transition-all duration-300 active:scale-95 group/btn">
+              <IoMdRefresh
+                size={18}
+                className="group-hover/btn:rotate-180 transition-transform duration-500"
+              />
+              See Ignored Users
+            </button>
+          </Link>
           <p className="mt-4 text-[9px] text-slate-600 font-bold uppercase tracking-widest">
             Updates every 24 hours
           </p>

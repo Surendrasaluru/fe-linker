@@ -11,6 +11,7 @@ import Feed from "./components/Feed";
 import Requests from "./components/Requests";
 import Friends from "./components/Friends";
 import IgnoredUsers from "./components/ignoredUsers";
+import Signup from "./components/Signup";
 function App() {
   return (
     <>
@@ -46,6 +47,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Body />}>
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/friends" element={<Friends />} />

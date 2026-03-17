@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -120,9 +120,11 @@ const Login = () => {
           </div>
           <p className="text-center text-sm mt-6 font-medium text-base-content/60">
             New here?{" "}
-            <span className="link link-primary no-underline hover:underline decoration-2 font-bold">
-              Sign up
-            </span>
+            <Link to="/signup">
+              <span className="link link-primary no-underline hover:underline decoration-2 font-bold">
+                Sign up
+              </span>
+            </Link>
           </p>
         </div>
       </div>

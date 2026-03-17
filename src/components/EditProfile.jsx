@@ -4,6 +4,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = ({ user }) => {
   const [firstName, setFirstName] = useState(user.firstName);
@@ -12,9 +13,11 @@ const EditProfile = ({ user }) => {
   const [photoURL, setphotoURL] = useState(user.photoURL);
   const [company, setCompany] = useState(user.company);
   const [gender, setGender] = useState(user.gender);
+  const [place, setPlace] = useState(user.place);
   const [skills, setSkills] = useState(user.skills || []);
   const [skillInput, setSkillInput] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSkillKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
@@ -35,11 +38,23 @@ const EditProfile = ({ user }) => {
     try {
       const res = await axios.patch(
         "http://localhost:3000/profileedit",
-        { firstName, lastName, about, photoURL, company, gender, skills },
+        {
+          firstName,
+          lastName,
+          about,
+          photoURL,
+          company,
+          gender,
+          place,
+          skills,
+        },
         { withCredentials: true },
       );
       dispatch(addUser(res.data.data));
       toast.success("Profile updated successfully!");
+      if (res.status === 200) {
+        navigate("/feed");
+      }
     } catch (err) {
       toast.error("Failed to update profile");
       console.error(err);
@@ -47,11 +62,11 @@ const EditProfile = ({ user }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1115] py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12 items-start">
+    <div className="min-h-screen bg-[#0f1115] py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-1 items-start">
         {/* LEFT: FORM SECTION */}
         <div className="lg:col-span-3 space-y-8 animate-in fade-in slide-in-from-left duration-700">
-          <div className="bg-[#16191e]/60 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-2xl">
+          <div className="bg-[#16191e]/60 backdrop-blur-xl border border-white/5 rounded-3xl p-5 shadow-2xl">
             <header className="mb-8">
               <h2 className="text-3xl font-black text-white tracking-tight">
                 Edit Profile
@@ -94,6 +109,17 @@ const EditProfile = ({ user }) => {
                   type="text"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
+                  className="input bg-white/5 border-white/10 text-white focus:border-violet-500/50 rounded-xl"
+                />
+              </div>
+              <div className="form-control">
+                <label className="label text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                  Place
+                </label>
+                <input
+                  type="text"
+                  value={place}
+                  onChange={(e) => setPlace(e.target.value)}
                   className="input bg-white/5 border-white/10 text-white focus:border-violet-500/50 rounded-xl"
                 />
               </div>
@@ -220,6 +246,7 @@ const EditProfile = ({ user }) => {
               photoURL,
               gender,
               skills,
+              place,
             }}
           />
         </div>
